@@ -2,21 +2,25 @@
 
 ## 5.1. Introducción. 
 
-En la mayor parte de las conexiones hechas a través de Internet se utiliza el nombre de las máquinas en vez de sus direcciones IP. Por motivos obvios los nombres son más fáciles de memorizar que los números. Sin embargo, las conexiones vía Internet entre las computadoras conectadas a esta red serán realizadas utilizando las direcciones IP. Por lo tanto, antes de iniciarse la conexión, se hace una traducción del nombre de la máquina a su dirección IP. Este proceso se llama Resolución DNS directa, o sea, conversión del nombre en dirección IP. 
+Nota importante: A lo largo de esta sección cuando nos referimos de manera genérica al término IP, podemos entenderlo como una dirección del protocolo IPv4 o bien del protocolo IPv6. En el momento que necesitemos ser específicos, vamos a mencionar el nombre completo del protocolo incluyendo su número de versión.
 
-Muchas veces es necesario también hacer la operación inversa, de donde surge el nombre de Resolución Inversa. En esta conversión, a partir de la dirección IP de un dispositivo, se intenta llegar al nombre asociado a éste. 
+En la mayor parte de las conexiones hechas a través de Internet se utiliza el nombre de las máquinas en vez de sus direcciones IP. Por motivos obvios los nombres son más fáciles de memorizar que los números. Sin embargo, las conexiones vía Internet entre las computadoras conectadas a esta red serán realizadas utilizando las direcciones IP. Por lo tanto, antes de iniciar la conexión, se hace una traducción del nombre de la máquina a su dirección IP. Este proceso se llama Resolución DNS directa, o sea, conversión del nombre en dirección IP. 
 
-Para que el proceso de resolución inversa sea posible es necesario que se utilice un dominio ficticio "in-addr.arpa", una abreviación para “Address and Routing Parameter Area”. 
+Muchas veces es necesario también hacer la operación inversa, de donde surge el nombre de "Resolución DNS Inversa". En esta conversión, a partir de la dirección IP de un dispositivo, se intenta llegar al nombre asociado a éste. 
 
-La delegación DNS de este seudo−dominio es responsabilidad de los Registros de Internet, ya que son ellos los responsables por las distribuciones de direcciones IP. 
+Para que el proceso de resolución inversa sea posible es necesario que se utilicen dos zonas DNS que son: "in-addr.arpa" en el caso de IPv4 e "ip6.arpa" en el caso de IPv6. Siendo ARPA un dominio de internet genérico de nivel superior que se usa como una abreviación para “Address and Routing Parameter Area”. 
+
+La delegación DNS de estas zonas es responsabilidad de los Registros de Internet, ya que son ellos los responsables por las distribuciones de direcciones IP. 
 
 ## 5.2. Registro de servidores DNS 
 
-Todo el espacio de direcciones IP distribuido debe tener un servidor DNS asociado que será responsable por la resolución inversa. En el caso de la región de cobertura de LACNIC [anexo 1], esos servidores deben ser registrados en LACNIC, quien a su vez es el responsable de la resolución inversa de los bloques administrados por esta organización. 
+Todo el espacio de direcciones IP distribuido debe tener un servidor DNS asociado que será responsable por la resolución inversa. En el caso de la región de cobertura de LACNIC [anexo 1], estos servidores deben ser registrados en LACNIC, quien a su vez es el responsable de la resolución inversa de los bloques administrados por esta organización. 
 
 LACNIC podrá utilizar información producto de la resolución inversa como indicador de la utilización del bloque de direcciones IP distribuido. 
 
-El registro de los servidores DNS del espacio de direcciones IP administrado por LACNIC, será hecho de forma diferente dependiendo del tamaño del espacio distribuido. Los prefijos menores o iguales a /16 distribuidos por LACNIC, deberán tener registrados en LACNIC los servidores DNS responsables para la resolución inversa. La información ingresada será relacionada a prefijos /16. Las distribuciones subsiguientes de segmentos de prefijos mayores hechas dentro de estos bloques, deberán tener los servidores DNS registrados en las organizaciones que recibieron los prefijo menores o iguales a /16 directamente desde LACNIC. 
+El registro de los servidores DNS del espacio de direcciones IP administrado por LACNIC, será hecho de forma diferente dependiendo del tamaño del espacio distribuido. 
+
+Específicamente para el caso de las direcciones IPv4, los prefijos menores o iguales a /16 distribuidos por LACNIC, deberán tener registrados en LACNIC los servidores DNS responsables para la resolución inversa. La información ingresada será relacionada a prefijos /16. Las distribuciones subsiguientes de segmentos de prefijos mayores hechas dentro de estos bloques, deberán tener los servidores DNS registrados en las organizaciones que recibieron los prefijo menores o iguales a /16 directamente desde LACNIC. 
 
 Los prefijos mayores que /16, distribuidos por LACNIC, deberán tener registrados en LACNIC los servidores DNS responsables para la resolución inversa para todos los prefijos /24 que componen el espacio total de direcciones IP distribuido por LACNIC. De esta forma, las distribuciones subsiguientes de prefijos hasta /24 hechas dentro de ese bloque deberán tener los servidores DNS registrados en LACNIC. 
 
@@ -38,3 +42,11 @@ Prefijo del bloque distribuido por LACNIC Servidor DNS para distribuciones subsi
 
 - /16 o menor: ISP que recibió el bloque. 
 - /17 o mayor: LACNIC
+
+Específicamente para el caso de las direcciones IPv6 y dada la naturaleza de la resolución inversa de sus direcciones, cada organización podrá registrar en LACNIC los servidores DNS que se van a encargar de responder la resolución inversa de los prefijos que le fueran oportunamente asignados teniendo en cuenta subdelegaciones hasta /48.
+
+En IPv6, las direcciones IP están compuestas por 8 grupos de 16 bits, cada uno de los cuales se puede representar como 4 dígitos hexadecimales, llamados "nibbles". 
+
+En la zona reversa, los nibbles se deben invertir en el orden en que aparecen en la dirección IPv6 original. Es decir, el nibble más a la derecha en la dirección IPv6 se convierte en el primer nibble en la zona reversa, mientras que el nibble más a la izquierda en la dirección IPv6 se convierte en el último nibble en la zona reversa.
+
+La delegación debe basarse en nibbles completos: En las zonas ip6.arpa, la delegación de una subzona debe basarse en nibbles completos de la dirección IPv6. Esto significa que no se deben dividir los nibbles a mitad de camino. Por ejemplo, no se debe dividir un nibble en la posición 3.5, ya que esto no es un nibble completo.
